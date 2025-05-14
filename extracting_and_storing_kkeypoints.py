@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 # --- CONFIG ---
-VIDEO_PATH = "data/resized_videos"
+VIDEO_PATH = "data/videos"
 WORDS = os.listdir(VIDEO_PATH)
 SEQUENCE_LENGTH = 30
 NUM_KEYPOINTS = 42  
