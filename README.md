@@ -1,97 +1,160 @@
-# Sign Language Recognition System – Project Workflow
+# Real-Time Sign Language Recognition
 
-This project is a complete pipeline for recognizing sign language gestures in real time using deep learning, computer vision, and text-to-speech technologies. The central orchestrator is `main.py`, which integrates all components from data collection to gesture recognition and voice output.
+![Project Demo](assets/demo.gif)
 
----
+A real-time sign language recognition system that uses **MediaPipe** for hand keypoint extraction and a **CNN-LSTM** model to recognize signs from video. Recognized signs can be translated into multiple supported languages and converted to speech for real-time interaction.
 
-## 1. Data Collection & Preprocessing
+## Features
 
-### extracting_and_storing_kkeypoints.py
-- Utilizes the **MediaPipe Holistic** model to extract keypoints from body, face, and hands.
-- Captures video input frame-by-frame via pre-recorded videos.
-- Keypoints are stored in `.npy` (NumPy array) format for efficient storage and training.
-- Organizes data into labeled directories based on gesture class for supervised learning.
+- Real-time sign language recognition using a webcam
+- Hand landmark detection and normalization using MediaPipe
+- CNN-LSTM based sign classification
+- Prediction smoothing and confidence filtering for more stable recognition
+- Support for **Hindi, Gujarati, Punjabi, and Urdu**
+- Translation of recognized signs
+- Text-to-speech audio generation and playback
+- Automatic and manual audio playback modes
+- Model evaluation with classification reports and confusion matrices
+- Model versioning and archiving
 
-### resize.py
-- Ensures consistency in input data by resizing all video frames to a fixed resolution.
-- Preprocessing helps standardize model inputs and improves keypoint extraction accuracy.
-- Can be applied as a batch processor for dataset normalization.
+## Project Structure
 
----
+```
+├── artifacts/          # Model artifacts, encoders, plots, reports, and test data
+├── assets/             # Demo video and project presentation
+├── config/             # Application, model, language, and path configuration
+├── data/               # Videos, processed sequences, translations, audio, and fonts
+├── models/             # Current and archived trained models
+├── notebook/           # Model training experiments
+├── scripts/            # Dataset preparation, training, translation, and setup scripts
+├── src/
+│   ├── audio/          # Audio generation and playback
+│   ├── data/           # Video processing and keypoint extraction
+│   ├── input/          # Keyboard input handling
+│   ├── model/          # Model architecture, training, and evaluation
+│   ├── pipelines/      # Training, evaluation, translation, and recognition pipelines
+│   ├── recognition/    # Real-time prediction logic
+│   ├── translations/   # Translation utilities and storage
+│   └── ui/             # Real-time display and landmark rendering
+├── app.py              # Streamlit application
+├── requirements.txt    # Python dependencies
+└── README.md
+```
 
-## 2. Data Augmentation
+For a detailed description of individual files, see [file_index.md](file_index.md).
 
-### augmentation.py
-- Expands the dataset by creating new variations of existing sequences.
-- Techniques include:
-  - Time warping (speeding up or slowing down sequences)
-  - Noise injection (simulating minor motion jitters)
-  - Cropping or rotating keypoints
-- Helps prevent overfitting and improves the model’s ability to generalize to unseen gestures.
+## Project Flow
+```text
+Raw Videos
+    ↓
+Video Resizing
+    ↓
+Keypoint Extraction
+    ↓
+Sequence Construction
+    ↓
+Train/Test Split
+    ↓
+Data Augmentation
+    ↓
+CNN-LSTM Training
+    ↓
+Evaluation
+    ↓
+Saved Model + Encoder
+    ↓
+Real-Time Camera
+    ↓
+Prediction → Translation → Audio
+```
 
----
+## Installation
 
-## 3. Feature Engineering
+Clone the repository and install the required dependencies:
 
-### feature_extraction.py
-- Transforms raw keypoints into meaningful **feature vectors**.
-- Includes calculations such as:
-  - Normalization of coordinates
-  - Angles between joints
-  - Distances between key landmarks
-- Output is structured to feed directly into the LSTM model for training.
+```
+pip install -r requirements.txt
+```
 
----
+Make sure a working webcam is available before running real-time recognition.
 
+## Dataset Preparation
 
-## 4. Real-Time Recognition
+Place the raw sign-language videos inside:
 
-### real_time_recognition.py
-- Uses a webcam to continuously capture live video.
-- Processes each frame through the MediaPipe pipeline to extract keypoints.
-- Feeds live keypoints into the trained CCNN-LSTM model for inference.
-- Predicts the gesture class and displays it in the interface.
+```
+data/videos/
+```
 
----
+The videos should be organized by sign/word, for example:
 
-## 5. Translation & Speech
+```
+data/videos/
+├── hello/
+├── thank_you/
+├── yes/
+└── no/
+```
 
-### pregenerat_translate.py
-- Maps gesture labels (like "hello", "thank you") to human-readable strings.
-- Supports easy modification or expansion of gesture-to-text mappings.
+Run the project setup script:
 
-### translate_and_speak.py
-- Uses a **text-to-speech (TTS)** engine (e.g., pyttsx3, gTTS) to convert recognized text into spoken language.
-- Provides real-time auditory feedback for accessibility and communication enhancement.
-- Can be configured for different languages and voices.
+```
+python scripts/setup_project.py
+```
 
----
+This prepares the videos, generates the training sequences, trains the model, evaluates it, and generates the required translations and audio files.
 
-## 6. Model Training
+## Running the Application
 
-### main.py
-- The central driver for training the gesture recognition model.
-- Responsibilities:
-  - Loads preprocessed .npy keypoint data.
-  - Splits data into training and validation sets.
-  - Loads or builds the LSTM and CNN-LSTM model.
-  - Trains the model using defined hyperparameters.
-  - Evaluates model performance and saves the trained model (.keras).
-- Includes training callbacks (e.g., EarlyStopping, ModelCheckpoint).
+After the model and required data have been generated, run:
 
----
+```
+python -m scripts/run_app.py
+```
 
-## Summary Pipeline
-Video Input → Frame Resize → Keypoint Extraction → Feature Vector → CNN-LSTM Model → Gesture Prediction → Text Translation → Speech Output
+## Model Training
 
----
+To train the model separately using the prepared dataset:
 
-## Technologies Used
+```
+python scripts/train_model.py
+```
 
-- **Python**
-- **MediaPipe**
-- **TensorFlow / Keras**
-- **NumPy, OpenCV**
-- **Text-to-Speech (pyttsx3 / gTTS)**
+The training pipeline builds the CNN-LSTM model, trains it, evaluates its performance, and saves the trained model and corresponding label encoder.
 
----
+## Supported Languages
+
+| Language | Code | Keyboard |
+| --- | --- | --- |
+| Hindi | `hi` | `H` |
+| Gujarati | `gu` | `G` |
+| Punjabi | `pa` | `P` |
+| Urdu | `ur` | `U` |
+
+## Keyboard Controls
+
+| Key | Action |
+| --- | --- |
+| `Q` | Quit the application |
+| `H` | Switch to Hindi |
+| `G` | Switch to Gujarati |
+| `P` | Switch to Punjabi |
+| `U` | Switch to Urdu |
+| `A` | Toggle automatic audio playback |
+| `Space` | Manually play audio for the current prediction |
+
+## Notes
+- The training dataset is not included in this repository. Users wishing to retrain the model should provide their own compatible video dataset.
+- The repository includes a pre-trained model for immediate use. The training pipeline is also provided for users who wish to train the model on their own dataset.
+- Translation and audio files are generated in advance to avoid performing translation during real-time recognition.
+- The trained model and label encoder are associated through the model version/ID.
+- Evaluation results are stored in `artifacts/reports/` and `artifacts/plots/`.
+
+## Future Work
+- **Logging**: Add structured logging for better debugging and error tracking.
+- **Incremental processing**: Resize only new or failed videos by comparing raw and processed files.
+- **Model validation**: Verify model metadata against the data version used for training.
+- **Font setup:** Add setup_fonts.py to automate required font setup for multilingual text rendering.
+- **Recognition accuracy**: Improve landmark normalization, augmentation, dataset quality, and model performance.
+- **Monitoring**: Add better runtime and per-class performance monitoring.
+- **API deployment and monitoring:** Develop a FastAPI service for model inference and monitor API performance using metrics such as latency, throughput, and request volume.

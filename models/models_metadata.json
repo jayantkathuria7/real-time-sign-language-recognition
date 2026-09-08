@@ -1,0 +1,52 @@
+[
+    {
+        "timestamp": "2026-09-06 19:12:25.947672",
+        "model_id": "cnn-lstm_v1.0",
+        "model_name": "CNN-LSTM",
+        "model_size": "1.87 MB",
+        "version": 1.0,
+        "status": "production",
+        "training_time": "10.214683833008166 seconds",
+        "dataset": {
+            "# signs": 15,
+            "total_videos": 177,
+            "path": "data/videos",
+            "size": "79.23 MB"
+        },
+        "evaluation_metrics": {
+            "test_accuracy": 0.81,
+            "test_macro_precision": 0.84,
+            "test_macro_recall": 0.82,
+            "test_macro_f1": 0.8,
+            "test_weighted_precision": 0.86,
+            "test_weighted_recall": 0.81,
+            "test_weighted_f1": 0.79,
+            "test_samples": 36
+        }
+    },
+    {
+        "timestamp": "2026-09-08 13:15:59.576626",
+        "model_id": "cnn-lstm_v1.1",
+        "model_name": "CNN-LSTM",
+        "model_size": "1.87 MB",
+        "version": 1.1,
+        "status": "production",
+        "training_time": "5.677667541982373 seconds",
+        "dataset": {
+            "# signs": 15,
+            "total_videos": 177,
+            "path": "data/videos",
+            "size": "79.25 MB"
+        },
+        "evaluation_metrics": {
+            "test_accuracy": 0.75,
+            "test_macro_precision": 0.8,
+            "test_macro_recall": 0.74,
+            "test_macro_f1": 0.74,
+            "test_weighted_precision": 0.8,
+            "test_weighted_recall": 0.75,
+            "test_weighted_f1": 0.74,
+            "test_samples": 36
+        }
+    }
+]

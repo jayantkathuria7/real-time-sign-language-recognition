@@ -1,9 +1,11 @@
 __pycache__/
 .env
 .venv/
-/data/
 .DS_Store
 .vscode/
 ideas.md
+data/videos
+data/audio
+data/resized_videos
 # Work in progress
 app.py
